@@ -20,3 +20,7 @@ N_TRIALS = 50
 
 # Model Names
 MODEL_NAMES = ['SimpleCNN', 'ResNet50', 'VGG19', 'EfficientNetV2B2']
+
+# Evaluation Paths
+EVALUATION_DATA_DIR = NORMALIZED_DATA_DIR
+EVALUATION_MODEL_PATHS = {model_name: os.path.join(OUTPUTS_DIR, 'normalized', 'models', f'{model_name}.keras') for model_name in MODEL_NAMES}
