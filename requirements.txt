@@ -1,1 +1,3 @@
+spams-bin
+staintools
 tensorflow

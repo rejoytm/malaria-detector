@@ -3,6 +3,8 @@ import os
 # Paths
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 DATA_DIR = os.path.join(BASE_DIR, 'data', 'cell_images')
+NORMALIZED_DATA_DIR = DATA_DIR + "_norm"
+NORMALIZATION_REFERENCE_IMAGE_PATH = os.path.join(DATA_DIR, 'template.png')
 OUTPUTS_DIR = os.path.join(BASE_DIR, 'outputs')
 
 # Common Hyperparameters
