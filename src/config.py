@@ -15,5 +15,8 @@ EARLY_STOP_PATIENCE = 5
 LEARNING_RATE = 0.0001
 SEED = 42
 
+# Hyperparameter optimization
+N_TRIALS = 50
+
 # Model Names
 MODEL_NAMES = ['SimpleCNN', 'ResNet50', 'VGG19', 'EfficientNetV2B2']

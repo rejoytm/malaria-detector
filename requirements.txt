@@ -1,3 +1,4 @@
+optuna
 spams-bin
 staintools
 tensorflow

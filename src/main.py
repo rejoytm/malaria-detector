@@ -5,6 +5,7 @@ from src import config
 from src.log import setup_logging
 from src.train import run_experiment
 from src.data_normalizer import run_normalization
+from src.tune import run_tuning
 
 setup_logging()
 logger = logging.getLogger(__name__)
@@ -14,7 +15,7 @@ parser.add_argument(
     '--mode', 
     type=str, 
     required=True, 
-    choices=['train_original', 'normalize', 'train_normalized'],
+    choices=['train_original', 'normalize', 'train_normalized', 'tune'],
     help='Select the operation to run.'
 )
 
@@ -29,6 +30,8 @@ def main():
     elif args.mode == 'train_normalized':
         logger.info("Training models on normalized images")
         run_experiment(experiment_name='normalized', data_dir=config.NORMALIZED_DATA_DIR)
+    elif args.mode == 'tune':
+        run_tuning(experiment_name='tune_efficientnetv2b2', data_dir=config.NORMALIZED_DATA_DIR, model_name='EfficientNetV2B2', base_weights_path='outputs/normalized/models/EfficientNetV2B2.keras')        
 
 if __name__ == "__main__":
     main()
