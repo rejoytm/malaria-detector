@@ -19,7 +19,7 @@ SEED = 42
 N_TRIALS = 50
 
 # Model Names
-MODEL_NAMES = ['SimpleCNN', 'ResNet50', 'VGG19', 'EfficientNetV2B2']
+MODEL_NAMES = ['SimpleCNN', 'ResNet50', 'VGG19', 'EfficientNetV2B2', 'MobileNetV3Large']
 
 # Evaluation Paths
 EVALUATION_DATA_DIR = NORMALIZED_DATA_DIR

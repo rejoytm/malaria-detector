@@ -1,6 +1,6 @@
 import tensorflow as tf
 from keras import layers, models, Input
-from keras.applications import ResNet50, VGG19, EfficientNetV2B2
+from keras.applications import ResNet50, VGG19, EfficientNetV2B2, MobileNetV3Large
 
 from src import config
 from src.data_loader import get_data_augmentation
@@ -31,6 +31,9 @@ def build_model(model_name):
     elif model_name == 'EfficientNetV2B2':
         x = tf.keras.applications.efficientnet_v2.preprocess_input(x)
         base_model = EfficientNetV2B2(weights='imagenet', include_top=False, input_tensor=x)
+    elif model_name == 'MobileNetV3Large':
+        x = tf.keras.applications.mobilenet_v3.preprocess_input(x)
+        base_model = MobileNetV3Large(weights='imagenet', include_top=False, input_tensor=x)        
     
     base_model.trainable = False # Freeze layers
     
