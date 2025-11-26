@@ -1,4 +1,6 @@
+fastapi
 optuna
 spams-bin
 staintools
 tensorflow
+uvicorn[standard]
