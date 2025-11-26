@@ -1,10 +1,9 @@
 import cv2
 import numpy as np
 import tensorflow as tf
-from keras import metrics
 
 from src import config
-from src.data_loader import load_dataset_splits
+from src.data_loader import load_dataset_splits, load_dataset_splits_dual
 
 # Calculates precision, recall, F1 score, and confusion matrix values
 def calculate_metrics(y_true, y_pred):
@@ -74,6 +73,44 @@ def evaluate_model(model_path, data_path):
 
     # Calculate metrics
     metrics = calculate_metrics(np.array(y_true), np.array(y_pred))
+    
+    # Print and return the evaluation metrics
+    print(f"Evaluation Metrics for model at {model_path}:")
+    print(f"Precision: {metrics['precision']:.4f}")
+    print(f"Recall: {metrics['recall']:.4f}")
+    print(f"F1 Score: {metrics['f1_score']:.4f}")
+    print(f"True Positives (TP): {metrics['tp']}")
+    print(f"True Negatives (TN): {metrics['tn']}")
+    print(f"False Positives (FP): {metrics['fp']}")
+    print(f"False Negatives (FN): {metrics['fn']}")
+    
+    return metrics
+
+# Loads the fusion model, makes predictions, and calculates metrics
+def evaluate_fusion_model(model_path, original_data_path, normalized_data_path):
+    model = load_model(model_path)
+    if model is None:
+        raise ValueError(f"Fusion model could not be loaded from {model_path}.")
+    
+    # Load dual dataset
+    train_ds, val_ds, test_ds = load_dataset_splits_dual(original_data_path, normalized_data_path)
+    
+    y_true = []
+    y_pred = []
+    
+    # Inputs will be a tuple (original_images, normalized_images)
+    for inputs, labels in test_ds:
+        # Use the dual inputs for prediction
+        predictions = model.predict(inputs)
+        predicted_labels = (predictions > 0.5).astype(int)
+        
+        y_true.extend(labels.numpy().flatten())
+        y_pred.extend(predicted_labels.flatten())
+
+    # Calculate metrics
+    y_true = np.array(y_true)
+    y_pred = np.array(y_pred)
+    metrics = calculate_metrics(y_true, y_pred)
     
     # Print and return the evaluation metrics
     print(f"Evaluation Metrics for model at {model_path}:")

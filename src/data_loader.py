@@ -68,6 +68,38 @@ def load_dataset_splits(data_path=config.DATA_DIR):
     
     return train_ds, val_ds, test_ds
 
+def load_dataset_splits_dual(original_data_path, normalized_data_path):
+    full_ds_orig = load_full_dataset(original_data_path)
+    full_ds_norm = load_full_dataset(normalized_data_path) 
+    
+    # Calculate sizes based on one dataset
+    train_size, val_size, test_size = calculate_split_sizes(full_ds_orig)
+    
+    # Zip the two datasets together
+    full_ds_dual = tf.data.Dataset.zip((full_ds_orig, full_ds_norm))
+
+    def map_dual_input(orig_batch, norm_batch):
+        # We assume labels are identical, take the original label
+        return (orig_batch[0], norm_batch[0]), orig_batch[1]
+    
+    full_ds_dual = full_ds_dual.map(map_dual_input)
+
+    # Split the zipped dataset
+    train_ds = full_ds_dual.take(train_size)
+    val_test_ds = full_ds_dual.skip(train_size)
+    val_ds = val_test_ds.take(val_size)
+    test_ds = val_test_ds.skip(val_size)
+    
+    # Performance optimization
+    AUTOTUNE = tf.data.AUTOTUNE
+    train_ds = train_ds.prefetch(buffer_size=AUTOTUNE)
+    val_ds = val_ds.prefetch(buffer_size=AUTOTUNE)
+    test_ds = test_ds.prefetch(buffer_size=AUTOTUNE)    
+
+    logger.info("Dual dataset loading and optimization complete.")
+    
+    return train_ds, val_ds, test_ds
+
 def get_data_augmentation():
     return tf.keras.Sequential([
         layers.RandomFlip("horizontal_and_vertical"),
