@@ -5,14 +5,14 @@ from fastapi import FastAPI, HTTPException, Body
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
 
-from api.config import DATASETS_CONFIG, MODELS_CONFIG
+from api.config import DATASETS_CONFIG, MODELS_CONFIG, ALLOWED_ORIGINS
 from api.inference import process_batch
 
 app = FastAPI()
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=["*"],
+    allow_origins=ALLOWED_ORIGINS,
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],

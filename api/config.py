@@ -91,3 +91,7 @@ MODELS_CONFIG = {
         "category": "fusion",
     },
 }
+
+ALLOWED_ORIGINS = [
+    "http://localhost:5173",  # SvelteKit frontend
+]
